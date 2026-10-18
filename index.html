@@ -1,0 +1,319 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Zaproszenie</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Londrina+Outline&family=Patrick+Hand&display=swap&subset=latin-ext">
+<style>
+:root {
+  --bg: #e9e0cb;
+  --paper: #f8f0dc;
+  --ink: #2f4a2c;
+  --muted: #5d6f57;
+  --lav: #cdbbe6;
+  --lemon: #f2dc6b;
+  --display: "Londrina Outline", "Patrick Hand", cursive;
+  --font: "Patrick Hand", "Comic Sans MS", system-ui, sans-serif;
+  color-scheme: light;
+}
+* { box-sizing: border-box; }
+html, body { min-height: 100%; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font);
+  font-size: 20px;
+  line-height: 1.35;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 44px;
+  display: grid;
+  place-items: center;
+}
+[hidden] { display: none !important; }
+
+/* Kartka z papieru czerpanego */
+.card {
+  position: relative;
+  width: 100%;
+  max-width: 440px;
+  background:
+    radial-gradient(circle at 20% 15%, rgba(255,255,255,.5), transparent 55%),
+    radial-gradient(circle at 85% 90%, rgba(190,160,110,.12), transparent 50%),
+    var(--paper);
+  border-radius: 3px;
+  padding: 34px 28px 18px;
+  display: grid;
+  gap: 18px;
+  box-shadow: 0 1px 2px rgba(60,50,20,.1), 0 22px 46px -22px rgba(60,50,20,.45);
+  overflow: hidden;
+}
+.card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: .35;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 .45 0 0 0 0 .38 0 0 0 0 .2 0 0 0 .35 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+section, .scene { position: relative; z-index: 1; }
+
+/* Ręcznie rysowany, konturowy nagłówek */
+h1 {
+  margin: 0;
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: clamp(68px, 20vw, 104px);
+  line-height: .86;
+  color: var(--ink);
+  -webkit-text-stroke: .6px var(--ink);
+  letter-spacing: .01em;
+  filter: url(#wobble);
+}
+h1 span { display: block; }
+h1 .l1 { transform: rotate(-2deg); transform-origin: left; }
+h1 .l2 { text-align: right; transform: rotate(1.5deg); transform-origin: right; }
+.sprig { position: absolute; top: -6px; right: 4px; width: 46px; filter: url(#wobble); }
+
+.lead {
+  margin: 4px 0 0;
+  font-size: 27px;
+  text-transform: uppercase;
+  letter-spacing: .03em;
+  line-height: 1.15;
+  text-wrap: balance;
+}
+.details {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 2px;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  font-size: 19px;
+  color: var(--muted);
+}
+.details li:first-child { font-size: 23px; color: var(--ink); }
+
+h2 {
+  margin: 0;
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: clamp(54px, 15vw, 72px);
+  line-height: .9;
+  color: var(--ink);
+  -webkit-text-stroke: .6px var(--ink);
+  filter: url(#wobble);
+  transform: rotate(-1.5deg);
+}
+
+.answers { position: relative; height: 128px; }
+.btn {
+  font-family: var(--font);
+  font-size: 24px;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  line-height: 1;
+  color: var(--ink);
+  border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+  padding: 12px 32px 11px;
+  cursor: pointer;
+  transition: transform .15s ease, left .25s ease, top .25s ease;
+}
+.btn:focus-visible { outline: 2px dashed var(--ink); outline-offset: 4px; }
+#yes {
+  position: absolute; left: 6%; top: 28px;
+  background: var(--lav);
+  border: 2px solid var(--ink);
+}
+#no {
+  position: absolute; right: 6%; top: 28px;
+  background: transparent; color: var(--muted);
+  border: 1.5px dashed var(--muted);
+}
+.hint {
+  position: absolute; left: 0; right: 0; bottom: 0; margin: 0;
+  text-align: center; font-size: 21px; color: var(--ink);
+  min-height: 1.2em;
+}
+
+.done { display: grid; gap: 14px; }
+.dog-photo { display: block; width: 100%; height: auto; border-radius: 3px; }
+.done p { margin: 0; color: var(--muted); }
+.small { font-size: 18px; }
+.alt { display: grid; gap: 10px; padding-top: 14px; border-top: 1.5px dashed var(--muted); }
+.reply {
+  background: rgba(255,255,255,.55); border-radius: 6px; padding: 10px 14px;
+  border: 1.5px solid var(--ink);
+  user-select: all; -webkit-user-select: all;
+}
+.copy { justify-self: start; font-size: 19px; padding: 9px 18px; background: var(--lemon); border: 2px solid var(--ink); }
+
+.scene { display: block; width: calc(100% + 24px); max-width: none; margin: 4px -12px 0; filter: url(#wobble); }
+@media (prefers-reduced-motion: reduce) { .btn { transition: none; } }
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <filter id="wobble"><feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="4"/><feDisplacementMap in="SourceGraphic" scale="2.6"/></filter>
+</svg>
+
+<main class="card">
+  <section id="ask" style="display:grid;gap:16px">
+    <svg class="sprig" viewBox="0 0 46 46" aria-hidden="true" fill="none" stroke="#2f4a2c" stroke-width="1.6" stroke-linecap="round">
+      <path d="M6 42C16 30 26 18 40 6"/>
+      <path d="M14 33c-5-3-6-8-4-12 4 2 6 7 4 12zM22 24c-5-3-6-8-4-12 4 2 6 7 4 12zM31 15c-4-3-5-7-3-11 4 2 5 6 3 11z" fill="#b8cf8e"/>
+      <path d="M16 31c5-1 10 1 12 5-5 1-9-1-12-5zM25 22c5-1 9 1 11 5-5 1-9-1-11-5z" fill="#b8cf8e"/>
+    </svg>
+    <h1><span class="l1">Zapro-</span><span class="l2">szenie!</span></h1>
+    <p class="lead">Hej, idziemy na randkę?</p>
+    <ul class="details">
+      <li>wtorek, 20 października</li>
+      <li>godz. 17:00</li>
+      <li>stacja metra Politechnika</li>
+    </ul>
+    <div class="answers" id="arena">
+      <button class="btn" id="yes" type="button">Tak</button>
+      <button class="btn" id="no" type="button">Nie</button>
+      <p class="hint" id="hint" aria-live="polite"></p>
+    </div>
+  </section>
+
+  <section id="done" class="done" hidden>
+    <h2>Super, do zobaczenia!</h2>
+    <img class="dog-photo" src="assets/dog.png" alt="Uśmiechnięty biały pies z fioletowymi kwiatami w pysku na łące" width="720" height="1245">
+    <div class="alt" id="fallback" hidden>
+      <p class="small">Coś poszło nie tak z wysłaniem. Skopiuj odpowiedź i wyślij mi ją w wiadomości:</p>
+      <div class="reply" id="replyText">TAK! Widzimy się we wtorek o 17:00 na Politechnice 🙂</div>
+      <button class="btn copy" id="copy" type="button">Skopiuj odpowiedź</button>
+      <p id="copyMsg" class="small" aria-live="polite"></p>
+    </div>
+  </section>
+
+  <!-- Ilustracja: butelka, kieliszki, kwiaty, cytryna -->
+  <svg class="scene" viewBox="0 0 400 160" aria-hidden="true" fill="none" stroke="#2f4a2c" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M15 100h38v26H15z" fill="#a9c4e4" stroke="none"/>
+    <path d="M28 18h10v40c0 8 15 14 15 26v68H15V84c0-12 13-18 13-26z"/>
+    <path d="M27 18v-6h12v6"/>
+    <path d="M80 76h32L96 94z" fill="#ece3b4" stroke="none"/>
+    <path d="M74 70h44L96 98z"/>
+    <path d="M96 98v44M83 148c6-4 20-4 26 0"/>
+    <path d="M87 60l16 22"/>
+    <circle cx="101" cy="79" r="4.5" fill="#a5bd5e"/>
+    <path d="M118 152a14 14 0 0 1 26 0z" fill="#c9df8e"/>
+    <path d="M131 152v-12M131 152l-8-8M131 152l8-8"/>
+    <g stroke-width="1.5">
+      <path d="M200 52v40M186 58v34M214 60v32"/>
+      <g fill="#b597d6"><ellipse cx="200" cy="56" rx="3" ry="5"/><ellipse cx="200" cy="66" rx="3" ry="5"/><ellipse cx="200" cy="76" rx="3" ry="5"/>
+      <ellipse cx="186" cy="62" rx="3" ry="5"/><ellipse cx="186" cy="72" rx="3" ry="5"/><ellipse cx="214" cy="64" rx="3" ry="5"/><ellipse cx="214" cy="74" rx="3" ry="5"/></g>
+      <g fill="#8fae6a"><path d="M160 104c-6-10-2-18 8-20 0 9-3 15-8 20z"/><path d="M240 104c6-10 2-18-8-20 0 9 3 15 8 20z"/><path d="M196 104c-6-6-14-6-18-2 5 4 12 5 18 2z"/><path d="M206 104c6-6 14-6 18-2-5 4-12 5-18 2z"/></g>
+      <g fill="#5f86d6">
+        <circle cx="168" cy="78" r="3.6"/><circle cx="174" cy="74" r="3.6"/><circle cx="178" cy="80" r="3.6"/><circle cx="173" cy="85" r="3.6"/><circle cx="166" cy="84" r="3.6"/>
+        <circle cx="226" cy="76" r="3.6"/><circle cx="232" cy="72" r="3.6"/><circle cx="236" cy="78" r="3.6"/><circle cx="231" cy="83" r="3.6"/><circle cx="224" cy="82" r="3.6"/>
+      </g>
+      <circle cx="172" cy="80" r="1.6" fill="#2f4a2c"/><circle cx="230" cy="78" r="1.6" fill="#2f4a2c"/>
+      <g fill="#efb29c"><circle cx="178" cy="98" r="11"/><circle cx="222" cy="98" r="11"/><circle cx="200" cy="94" r="12"/></g>
+      <path d="M174 98c0-5 8-5 8 0s-6 6-9 2M218 98c0-5 8-5 8 0s-6 6-9 2M196 94c0-5 8-5 8 0s-6 7-10 2"/>
+    </g>
+    <path d="M154 106h92c-4 24-88 24-92 0z" fill="#f8f0dc"/>
+    <path d="M172 112l6 10M200 112v12M228 112l-6 10" stroke-width="1.4"/>
+    <path d="M192 128l-4 14h24l-4-14"/>
+    <path d="M250 152c10-8 20-12 34-14M262 146l-4-8M274 141l2-8" stroke-width="1.5"/>
+    <g fill="#efb29c"><circle cx="257" cy="135" r="5"/><circle cx="277" cy="130" r="5"/></g>
+    <path d="M302 52h16c0 22-2 34-8 40-6-6-8-18-8-40z" fill="#f1e3a6" stroke="none"/>
+    <path d="M300 34h20c0 30-3 50-10 58-7-8-10-28-10-58z"/>
+    <path d="M310 92v48M298 146c6-4 18-4 24 0"/>
+    <circle cx="307" cy="62" r="1.3"/><circle cx="312" cy="72" r="1.3"/><circle cx="309" cy="80" r="1.1"/>
+    <path d="M340 148c2-8 12-12 22-10 8 2 12 8 10 14-6 6-18 6-26 4-3-1-5-4-6-8z" fill="#f2dc6b"/>
+    <path d="M338 146l-4-2M374 150l4 1"/>
+    <path d="M356 120c4-6 12-8 20-6 6 2 8 6 7 10-5 5-14 5-20 3-4-1-6-4-7-7z" fill="#f2dc6b"/>
+  </svg>
+</main>
+
+<script>
+(function () {
+  const arena = document.getElementById('arena');
+  const no = document.getElementById('no');
+  const yes = document.getElementById('yes');
+  const hint = document.getElementById('hint');
+  const lines = [
+    'Na pewno?',
+    'Ten przycisk chyba nie działa…',
+    'Spróbuj ten drugi',
+    'Serio, ten drugi'
+  ];
+  let tries = 0;
+  let yesScale = 1;
+
+  function flee(e) {
+    if (e) e.preventDefault();
+    const a = arena.getBoundingClientRect();
+    const b = no.getBoundingClientRect();
+    const yr = yes.getBoundingClientRect();
+    const maxX = Math.max(0, a.width - b.width);
+    const maxY = Math.max(0, a.height - b.height - 24);
+    let x, y, guard = 0;
+    do {
+      x = Math.random() * maxX;
+      y = Math.random() * maxY;
+      guard++;
+    } while (guard < 20 &&
+      x < yr.right - a.left && x + b.width > yr.left - a.left &&
+      y < yr.bottom - a.top && y + b.height > yr.top - a.top);
+    no.style.right = 'auto';
+    no.style.left = x + 'px';
+    no.style.top = y + 'px';
+    hint.textContent = lines[Math.min(tries, lines.length - 1)];
+    tries++;
+    yesScale = Math.min(1.3, yesScale + 0.06);
+    yes.style.transform = 'scale(' + yesScale + ')';
+  }
+
+  no.addEventListener('mouseenter', flee);
+  no.addEventListener('touchstart', flee, { passive: false });
+  no.addEventListener('click', flee);
+  no.addEventListener('focus', function () { if (tries > 0) flee(); });
+
+  const FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSeFjfCCrOIxEcvYvBM98oAt2l07X4EdJ7qvW5sSTnNnZ_benQ/formResponse';
+  let sent = false;
+
+  yes.addEventListener('click', function () {
+    document.getElementById('ask').hidden = true;
+    document.getElementById('done').hidden = false;
+    if (sent) return;
+    sent = true;
+    const body = new URLSearchParams();
+    body.append('entry.373358941', 'Tak 💛');
+    body.append('fvv', '1');
+    body.append('pageHistory', '0');
+    fetch(FORM_URL, { method: 'POST', mode: 'no-cors', body: body })
+      .catch(function () {
+        document.getElementById('fallback').hidden = false;
+      });
+  });
+
+  document.getElementById('copy').addEventListener('click', function () {
+    const el = document.getElementById('replyText');
+    const msg = document.getElementById('copyMsg');
+    function selectIt() {
+      const r = document.createRange();
+      r.selectNodeContents(el);
+      const s = window.getSelection();
+      s.removeAllRanges(); s.addRange(r);
+      msg.textContent = 'Tekst zaznaczony, skopiuj go i wklej mi w wiadomości.';
+    }
+    try {
+      navigator.clipboard.writeText(el.textContent).then(function () {
+        msg.textContent = 'Skopiowane! Teraz wklej mi to w wiadomości.';
+      }, selectIt);
+    } catch (err) { selectIt(); }
+  });
+})();
+</script>
+</body>
+</html>
